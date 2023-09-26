@@ -173,7 +173,7 @@ paths:
         schema:
           maximum: 10
           minimum: 0
-          type: integer
+          type: float
       responses:
         "200":
           description: rate updated
@@ -203,8 +203,8 @@ components:
           type: string
           example: The Martian
         rating:
-          type: integer
-          example: 7
+          type: float
+          example: 7.0
         director:
           type: string
           example: Paul McGuigan
