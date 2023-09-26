@@ -48,6 +48,13 @@ def get_movie_bytitle():
         res = make_response(jsonify(json),200)
     return res
 
+@app.route("/moviesbyDirector/<movieDirector>", methods=['GET'])
+def get_movie_byDirector(movieDirector):
+    res = [mov for mov in movies if str(mov["director"]) == str(movieDirector)]
+    if(len(res) != 0):
+        return make_response(jsonify(res),200)
+    return make_response(jsonify({"error":"no movies for this directord"}),400)
+
 @app.route("/movies/<movieid>", methods=['POST'])
 def create_movie(movieid):
     req = request.get_json()
