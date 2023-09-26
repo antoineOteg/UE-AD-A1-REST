@@ -1,0 +1,31 @@
+---
+openapi: 3.1.0
+info:
+  title: User API
+  description: This is the API of the User service
+  contact:
+    email: helene.coullon@imt-atlantique.fr
+  license:
+    name: GPL v3
+    url: https://www.gnu.org/licenses/gpl-3.0.en.html
+  version: 1.0.0
+tags:
+- name: admins
+  description: Secured Admin-only calls
+- name: developers
+  description: Operations available to regular developers
+paths:
+  /:
+    get:
+      tags:
+      - developers
+      summary: home page of the service
+      operationId: home
+      responses:
+        "200":
+          description: welcome message
+          content:
+            text/html:
+              schema:
+                type: string
+                example: <h1 style='color:blue'>Welcome to the User service!</h1>

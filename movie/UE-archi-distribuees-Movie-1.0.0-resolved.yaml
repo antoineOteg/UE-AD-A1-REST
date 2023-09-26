@@ -48,7 +48,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AllMovies'
+                $ref: '#/components/schemas/MoviesCollection'
   /movies/{movieid}:
     get:
       tags:
@@ -148,6 +148,29 @@ paths:
                 $ref: '#/components/schemas/MovieItem'
         "400":
           description: bad input parameter
+  /moviesbyDirector:
+    get:
+      tags:
+      - developers
+      summary: get one or multiple movies by them directors
+      description: By passing in the appropriate options, you can get all the movies of an director
+      operationId: get_movie_byDirector
+      parameters:
+      - name: movieDirector
+        in: path
+        description: Director of movies.
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: List of all the movies directed by the director
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MoviesCollection'
+        "400":
+          description: no movies for this director
   /movies/{movieid}/{rate}:
     put:
       tags:
@@ -181,7 +204,7 @@ paths:
           description: movie ID not found
 components:
   schemas:
-    AllMovies:
+    MoviesCollection:
       type: object
       required:
         - movies
