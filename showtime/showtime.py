@@ -21,9 +21,9 @@ def get_schedule():
   
 @app.route("/showmovies/<date>", methods=['GET'])
 def get_movies_bydate(date):
-   res = [sched for sched in schedule if str(sched["date"]) == str(date)]
-   if len(res) != 0:
-      return make_response(jsonify(res),200)
+   for sched in schedule:
+      if str(sched["date"]) == str(date):
+         return make_response(jsonify(sched), 200)
    return make_response(jsonify({"error":"bad input parameter"}),400)
 
 if __name__ == "__main__":
