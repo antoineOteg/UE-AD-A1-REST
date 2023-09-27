@@ -33,16 +33,23 @@ def get_booking_for_user(userid: str):
 def add_booking_byuser(userid: str):
    req = request.get_json()
 
-   for booking in bookings:
-      if str(booking["userid"]) == str(userid):
-         for date in booking["dates"]:
-            if str(date["date"]) == str(req["date"]):
-               date["movies"].append(req["movieid"])
-               return make_response(jsonify({"message":"booking added"}),200)
+   booking = None
+   for el in bookings:
+      if str(el["userid"]) == str(userid):
+         booking = el
+         break
+
+   if booking is None:
+      return make_response(jsonify({"error":"User ID not found"}),400)
    
-         booking["dates"].append({"date": str(req["date"]), "movies": [str(req["movieid"])]})
+   for date in booking["dates"]:
+      if str(date["date"]) == str(req["date"]):
+         date["movies"].append(req["movieid"])
          return make_response(jsonify({"message":"booking added"}),200)
-   return make_response(jsonify({"error":"User ID not found"}),400)
+
+   booking["dates"].append({"date": str(req["date"]), "movies": [str(req["movieid"])]})
+   return make_response(jsonify({"message":"booking added"}),200)
+
 
 
 
