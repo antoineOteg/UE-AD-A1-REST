@@ -17,7 +17,6 @@ def home():
 
 @app.route("/bookings", methods=['GET'])
 def get_json():   
-   print(bookings)
    return make_response(jsonify(bookings), 200)
 
 @app.route("/bookings/<userid>", methods=['GET'])
@@ -32,6 +31,15 @@ def get_booking_for_user(userid: str):
 @app.route("/bookings/<userid>", methods=['POST'])
 def add_booking_byuser(userid: str):
    req = request.get_json()
+   movieid = str(req["movieid"])
+   moviedate = str(req["date"])
+   try:
+      showtime = requests.get(f"http://localhost:3202/showmovies/{moviedate}")
+   except:
+      return make_response(jsonify({"message":"error when requesting showtime"}),400)
+   
+   if showtime.status_code != 200 or movieid not in showtime.json()["movies"]:
+      return make_response(jsonify({"message":"no showtime found for this booking"}),400)
 
    booking = None
    for el in bookings:
@@ -43,11 +51,11 @@ def add_booking_byuser(userid: str):
       return make_response(jsonify({"error":"User ID not found"}),400)
    
    for date in booking["dates"]:
-      if str(date["date"]) == str(req["date"]):
-         date["movies"].append(req["movieid"])
+      if str(date["date"]) == moviedate:
+         date["movies"].append(movieid)
          return make_response(jsonify({"message":"booking added"}),200)
 
-   booking["dates"].append({"date": str(req["date"]), "movies": [str(req["movieid"])]})
+   booking["dates"].append({"date": moviedate, "movies": [movieid]})
    return make_response(jsonify({"message":"booking added"}),200)
 
 
