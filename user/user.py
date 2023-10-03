@@ -8,6 +8,14 @@ app = Flask(__name__)
 PORT = 3203
 HOST = '0.0.0.0'
 bookingPort = 3201
+showtime = 3202
+
+def request_service(method, path):
+   try:
+      req = method(path)
+      return make_response(jsonify(req.json()), req.status_code)
+   except Exception as e:
+      return make_response(jsonify({"error": str(e)}), 500)
 
 with open('{}/databases/users.json'.format("."), "r") as jsf:
     users = json.load(jsf)["users"]
@@ -77,51 +85,47 @@ def delete_user_by_id(id):
 
 @app.route("/movies/<movieid>", methods=['GET'])
 def get_movie_byid(movieid):
-   return requests.get(f"http://localhost:3201/movies/{movieid}")
+   return request_service(requests.get, f"http://{HOST}:{moviePort}/movies/{movieid}")
 
 
 @app.route("/moviesbytitle", methods=['GET'])
 def get_movie_bytitle():
-   return requests.get(f"http://localhost:3201/moviesbytitle")
+   return request_service(requests.get, f"http://{HOST}:{moviePort}/moviesbytitle")
    
 
 @app.route("/moviesbyDirector/<movieDirector>", methods=['GET'])
 def get_movie_byDirector(movieDirector):
-   return requests.get(f"http://localhost:3201/moviesbyDirector/{movieDirector}")
+   return request_service(requests.get, f"http://{HOST}:{moviePort}/moviesbyDirector/{movieDirector}")
    
 
 @app.route("/movies/<movieid>", methods=['POST'])
 def create_movie(movieid):
-   return requests.post(f"http://localhost:3201/movies/{movieid}")
+   return request_service(requests.post, f"http://{HOST}:{moviePort}/movies/{movieid}")
 
 
 @app.route("/movies/<movieid>/<rate>", methods=['PUT'])
 def update_movie_rating(movieid, rate):
-   return requests.put(f"http://localhost:3201/movies/{movieid}/{rate}")
+   return request_service(requests.put, f"http://{HOST}:{moviePort}/movies/{movieid}/{rate}")
 
 
 @app.route("/movies/<movieid>", methods=['DELETE'])
 def del_movie(movieid):
-   return requests.delete(f"http://localhost:3201/movies/{movieid}")
+   return request_service(requests.delete, f"http://{HOST}:{moviePort}/movies/{movieid}")
 
 # showtimes delegation
 
 @app.route("/showtimes", methods=['GET'])
 def get_schedule():
-   return requests.get(f"http://localhost:3201/showtimes")
+   return request_service(requests.get, f"http://{HOST}:{showtime}/showtimes")
+   
   
 @app.route("/showmovies/<date>", methods=['GET'])
 def get_movies_bydate(date):
-   return requests.get(f"http://localhost:3201/showtimes/{date}")
+   return request_service(requests.get, f"http://{HOST}:{showtime}/showtimes/{date}")
 
 @app.route("/user/bookings/<userid>", methods=['GET'])
 def get_user_bookings(userid):
-    try:
-        bookings = requests.get(f'http://{HOST}:{bookingPort}/bookings/{userid}')
-        print(bookings)
-        return make_response(bookings.json(), bookings.status_code)
-    except:
-        return make_response(jsonify({"error": "error when requesting booking"}), 400)
+    return request_service(requests.get, f'http://{HOST}:{bookingPort}/bookings/{userid}')
 
 if __name__ == "__main__":
     print("Server running in port %s" % (PORT))
