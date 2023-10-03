@@ -134,6 +134,32 @@ paths:
         "400":
           description: there is no user to delete for this id
 
+  # boking delegation
+
+  /bookings/{userid}:
+    get:
+      tags:
+        - developers
+      summary: get the bookings from a user id
+      operationId: get_user_bookings
+      parameters:
+        - name: userid
+          in: path
+          description: User ID.
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+          "200":
+            description: Bookings of the user
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/BookingsUser'
+          "400":
+            description: bad input parameter
 
   # movie delegation
 
@@ -369,7 +395,37 @@ components:
         name:
           type: string
           example: Peter Curley
+    
+    # Booking Componenet
 
+    BookingsUser:
+      required:
+        - dates
+        - userid
+      type: object
+      properties:
+        userid:
+          type: string
+          example: chris_rivers
+        dates:
+          type: array
+          items:
+            $ref: '#/components/schemas/DateItem'
+    DateItem:
+      required:
+        - date
+        - movies
+      type: object
+      properties:
+        date:
+          type: string
+          example: "20151201"
+        movies:
+          type: array
+          items:
+            type: string
+            example: 276c79ec-a26a-40a6-b3d3-fb242a5947b6
+        
     # Movie Component
 
     MoviesCollection:
