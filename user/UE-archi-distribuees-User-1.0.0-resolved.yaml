@@ -134,6 +134,205 @@ paths:
         "400":
           description: there is no user to delete for this id
 
+
+  # movie delegation
+
+  /movies/{movieid}:
+    get:
+      tags:
+      - developers
+      summary: get the movie by its id
+      description: By passing in the appropriate options, you can get info of a Movie
+      operationId: get_movie_byid
+      parameters:
+      - name: movieid
+        in: path
+        description: Movie ID.
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Movie description
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MovieItem'
+        "400":
+          description: bad input parameter
+    post:
+      tags:
+      - admins
+      summary: add a movie item
+      description: Adds a movie to the system
+      operationId: create_movie
+      parameters:
+      - name: movieid
+        in: path
+        description: Movie ID.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        description: Inventory item to add
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MovieItem'
+      responses:
+        "200":
+          description: Movie created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MovieItem'
+        "409":
+          description: an existing item already exists
+    delete:
+      tags:
+      - admins
+      summary: delete a movie item
+      description: Adds a movie to the system
+      operationId: del_movie
+      parameters:
+      - name: movieid
+        in: path
+        description: Movie ID.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: item deleted
+        "400":
+          description: ID not found
+  /moviesbytitle:
+    get:
+      tags:
+      - developers
+      summary: get the movie by its title
+      description: |
+        By passing in the appropriate options, you can get Movie info
+      operationId: get_movie_bytitle
+      parameters:
+      - name: title
+        in: query
+        description: pass a title
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Movie item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MovieItem'
+        "400":
+          description: bad input parameter
+  /moviesbyDirector:
+    get:
+      tags:
+      - developers
+      summary: get one or multiple movies by them directors
+      description: By passing in the appropriate options, you can get all the movies of an director
+      operationId: get_movie_byDirector
+      parameters:
+      - name: movieDirector
+        in: path
+        description: Director of movies.
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: List of all the movies directed by the director
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MoviesCollection'
+        "400":
+          description: no movies for this director
+  /movies/{movieid}/{rate}:
+    put:
+      tags:
+      - admins
+      summary: update a movie rate
+      description: update the rating of a movie
+      operationId: update_movie_rating
+      parameters:
+      - name: movieid
+        in: path
+        description: Movie ID.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: rate
+        in: path
+        description: Movie rating.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          maximum: 10
+          minimum: 0
+          type: float
+      responses:
+        "200":
+          description: rate updated
+        "400":
+          description: movie ID not found
+  
+
+  #showtimes delegation
+
+  /showtimes:
+    get:
+      tags:
+      - developers
+      summary: get the full JSON database
+      operationId: get_schedule
+      responses:
+        "200":
+          description: full JSON
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AllSchedule'
+  /showmovies/{date}:
+    get:
+      tags:
+      - developers
+      summary: get the schedule by date
+      operationId: get_movies_bydate
+      parameters:
+      - name: date
+        in: path
+        description: date.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Schedule
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Schedule'
+        "400":
+          description: bad input parameter
+
+
 components:
   schemas:
     UsersCollection:
@@ -170,3 +369,62 @@ components:
         name:
           type: string
           example: Peter Curley
+
+    # Movie Component
+
+    MoviesCollection:
+      type: object
+      required:
+        - movies
+      properties:
+        movies:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/MovieItem'
+    MovieItem:
+      type: object
+      required:
+        - title
+        - rating
+        - director
+        - id
+      properties:
+        title:
+          type: string
+          example: The Martian
+        rating:
+          type: float
+          example: 7.0
+        director:
+          type: string
+          example: Paul McGuigan
+        id:
+          type: string
+          example: 39ab85e5-5e8e-4dc5-afea-65dc368bd7ab
+
+    #showtimes component
+
+    AllSchedule:
+      required:
+      - schedule
+      type: object
+      properties:
+        schedule:
+          type: array
+          items:
+            $ref: '#/components/schemas/Schedule'
+    Schedule:
+      required:
+      - date
+      - movies
+      type: object
+      properties:
+        date:
+          type: string
+          example: "20151130"
+        movies:
+          type: array
+          items:
+            type: string
+            example: 720d006c-3a57-4b6a-b18f-9b713b073f3c

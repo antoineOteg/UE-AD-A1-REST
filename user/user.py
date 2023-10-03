@@ -72,6 +72,46 @@ def delete_user_by_id(id):
          return make_response(jsonify(tmpUser), 200)
    return make_response(jsonify({"error":"there is no user to delete for this id"}),400)
 
+# movie delegation
+
+@app.route("/movies/<movieid>", methods=['GET'])
+def get_movie_byid(movieid):
+   return requests.get(f"http://localhost:3201/movies/{movieid}")
+
+
+@app.route("/moviesbytitle", methods=['GET'])
+def get_movie_bytitle():
+   return requests.get(f"http://localhost:3201/moviesbytitle")
+   
+
+@app.route("/moviesbyDirector/<movieDirector>", methods=['GET'])
+def get_movie_byDirector(movieDirector):
+   return requests.get(f"http://localhost:3201/moviesbyDirector/{movieDirector}")
+   
+
+@app.route("/movies/<movieid>", methods=['POST'])
+def create_movie(movieid):
+   return requests.post(f"http://localhost:3201/movies/{movieid}")
+
+
+@app.route("/movies/<movieid>/<rate>", methods=['PUT'])
+def update_movie_rating(movieid, rate):
+   return requests.put(f"http://localhost:3201/movies/{movieid}/{rate}")
+
+
+@app.route("/movies/<movieid>", methods=['DELETE'])
+def del_movie(movieid):
+   return requests.delete(f"http://localhost:3201/movies/{movieid}")
+
+# showtimes delegation
+
+@app.route("/showtimes", methods=['GET'])
+def get_schedule():
+   return requests.get(f"http://localhost:3201/showtimes")
+  
+@app.route("/showmovies/<date>", methods=['GET'])
+def get_movies_bydate(date):
+   return requests.get(f"http://localhost:3201/showtimes/{date}")
 
 if __name__ == "__main__":
    print("Server running in port %s"%(PORT))
