@@ -29,6 +29,110 @@ paths:
               schema:
                 type: string
                 example: <h1 style='color:blue'>Welcome to the User service!</h1>
+  /users:
+    get:
+      tags:
+      - developers
+      summary: get all the users
+      description: Use this route for getting all the user of the DataBase !
+      operationId: get_all
+      responses:
+        "200":
+          description: All the users
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UsersCollection'
+    post:
+      tags:
+      - admins
+      summary: add a new user
+      description: Add a new user regarding the first and last name parameters. Can't create two identical users (same first and last name)
+      operationId: create_user
+      requestBody:
+        description: user to add
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewUser'
+      responses:
+        "200":
+          description: User created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserItem'
+        "400":
+          description: attribut name missing
+        "409":
+          description: user ID already exists
+  /users/{id}:
+    get:
+      tags:
+      - developers
+      summary: get the user by its id
+      description: By passing in the appropriate options, you can get info of a User
+      operationId: get_user_byid
+      parameters:
+      - name: id
+        in: path
+        description: User ID.
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: User get by the id of the parameter
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserItem'
+        "400":
+          description: user ID don't exists
+    put:
+      tags:
+      - developers
+      summary: update or create user by id
+      description: update the user by the id passed in parameter, if ID don't exist, create a new one
+      operationId: create_update_user
+      parameters:
+      - name: id
+        in: path
+        description: User ID.
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: User just created / updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserItem'
+        "400":
+          description: attribut name missing
+    delete:
+      tags:
+      - developers
+      summary: delete user by id
+      description: delete user by the ID passed in parameter
+      operationId: delete_user_by_id
+      parameters:
+      - name: id
+        in: path
+        description: User ID.
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: User just deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserItem'
+        "400":
+          description: there is no user to delete for this id
   /bookings/{userid}:
     get:
       tags:
@@ -55,6 +159,40 @@ paths:
             description: bad input parameter
 components:
   schemas:
+    UsersCollection:
+      type: object
+      required:
+        - users
+      properties:
+        users:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/UserItem'
+    UserItem:
+      type: object
+      required:
+        - id
+        - name
+        - last_active
+      properties:
+        id:
+          type: string
+          example: peter_curley
+        name:
+          type: string
+          example: Peter Curley
+        last_active:
+          type: integer
+          example: 1360031222
+    NewUser:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          example: Peter Curley
     BookingsUser:
       required:
         - dates
