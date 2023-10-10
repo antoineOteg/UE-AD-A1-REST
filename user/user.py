@@ -7,12 +7,14 @@ app = Flask(__name__)
 
 PORT = 3203
 HOST = '0.0.0.0'
+moviePort = 3200
 bookingPort = 3201
 showtime = 3202
 
+
 def request_service(method, path):
    try:
-      req = method(path)
+      req = method(path, json=request.get_json())
       return make_response(jsonify(req.json()), req.status_code)
    except Exception as e:
       return make_response(jsonify({"error": str(e)}), 500)
