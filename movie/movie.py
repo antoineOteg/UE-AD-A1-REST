@@ -63,6 +63,7 @@ def create_movie(movieid):
         if str(movie["id"]) == str(movieid):
             return make_response(jsonify({"error":"movie ID already exists"}),409)
 
+    req['id'] = movieid
     movies.append(req)
     res = make_response(jsonify(req),200)
     return res
