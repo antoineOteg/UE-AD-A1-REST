@@ -127,7 +127,7 @@ def get_schedule():
 
 @app.route("/showmovies/<date>", methods=['GET'])
 def get_movies_bydate(date):
-    return request_service(requests.get, f"http://{HOST}:{showtime}/showmovies/{date}")
+    return request_service(requests.get, f"http://{HOST}:{showtime}/showmovies‹/{date}")
 
 
 @app.route("/user/bookings/<userid>", methods=['GET'])
