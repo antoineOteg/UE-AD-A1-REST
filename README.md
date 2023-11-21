@@ -39,19 +39,21 @@ To deploy the project, clone this repository on your machine.
 
 Each service must be started manually.
 
-Open four command terminals in each microservice folder user, movie, booking and showtime. 
-
-Then, run these commands in order and in the correct terminal :
+Open four command terminals. Then, run these commands in each terminal :
 ```
+cd user/
 python3 user.py
 ```
 ```
+cd movie/
 python3 movie.py
 ```
 ```
+cd booking/
 python3 booking.py
 ```
 ```
+cd showtime/
 python3 showtime.py
 ```
 
