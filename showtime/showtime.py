@@ -4,8 +4,12 @@ from werkzeug.exceptions import NotFound
 
 app = Flask(__name__)
 
+### config var ###
+
 PORT = 3202
 HOST = '0.0.0.0'
+
+###           ###
 
 with open('{}/databases/times.json'.format("."), "r") as jsf:
     schedule = json.load(jsf)["schedule"]
@@ -15,13 +19,14 @@ with open('{}/databases/times.json'.format("."), "r") as jsf:
 def home():
     return "<h1 style='color:blue'>Welcome to the Showtime service!</h1>"
 
-
+# get all schedule
 @app.route("/showtimes", methods=['GET'])
 def get_schedule():
     res = make_response(jsonify(schedule), 200)
     return res
 
 
+# get a schedule regarding a date
 @app.route("/showmovies/<date>", methods=['GET'])
 def get_movies_bydate(date):
     for sched in schedule:
