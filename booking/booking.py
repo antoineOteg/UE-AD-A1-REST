@@ -14,7 +14,7 @@ with open('{}/databases/bookings.json'.format("."), "r") as jsf:
     bookings = json.load(jsf)["bookings"]
 
 
-# home page
+# welcome page
 @app.route("/", methods=['GET'])
 def home():
     return "<h1 style='color:blue'>Welcome to the Booking service!</h1>"
