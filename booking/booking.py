@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify, make_response
+from flask import Flask, request, jsonify, make_response
 import requests
 import json
 
@@ -29,6 +29,7 @@ def get_json():
 # get all bookings of user by its id
 @app.route("/bookings/<userid>", methods=['GET'])
 def get_booking_for_user(userid: str):
+    # search booking in database
     for booking in bookings:
         if str(booking["userid"]) == str(userid):
             res = make_response(jsonify(booking), 200)
