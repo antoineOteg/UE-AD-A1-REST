@@ -103,7 +103,7 @@ def get_movie_byDirector(movieDirector):
     return request_service(requests.get, f"http://{HOST}:{moviePort}/moviesbyDirector/{movieDirector}")
 
 
-@app.route("/movies/<movieid>", methods=['POST'])
+@app.route("/movies", methods=['POST'])
 def create_movie(movieid):
     return request_service(requests.post, f"http://{HOST}:{moviePort}/movies/{movieid}")
 
