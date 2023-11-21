@@ -54,3 +54,14 @@ python3 booking.py
 ```
 python3 showtime.py
 ```
+
+### Access Services
+
+By default, services are accessible on the following ips :
+
+- User : 127.0.0.1:3203
+- Booking : 127.0.0.1:3201
+- Movie : 127.0.0.1:3200
+- Showtime : 127.0.0.1:3202
+
+Postman Collections are available in the folder /postman for you to test endpoints.
