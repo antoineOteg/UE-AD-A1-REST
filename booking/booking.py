@@ -59,8 +59,9 @@ def add_booking_byuser(userid: str):
             date["movies"].append(movieid)
             return make_response(jsonify({"message": "booking added"}), 200)
 
-    booking["dates"].append({"date": moviedate, "movies": [movieid]})
-    return make_response(jsonify({"message": "booking added"}), 200)
+    new = {"date": moviedate, "movies": [movieid]}
+    booking["dates"].append(new)
+    return make_response(jsonify(new), 200)
 
 
 if __name__ == "__main__":
