@@ -36,25 +36,20 @@ showtimes for the movies.
 
 To deploy the project, clone this repository on your machine.
 
+Place yourself in the root directory and run the following command :
 
-Each service must be started manually.
+```
+docker-compose up
+```
 
-Open four command terminals. Then, run these commands in each terminal :
+If you need to delete the containers :
 ```
-cd user/
-python3 user.py
+docker-compose rm
 ```
+
+And finally to rebuild the image if needed :
 ```
-cd movie/
-python3 movie.py
-```
-```
-cd booking/
-python3 booking.py
-```
-```
-cd showtime/
-python3 showtime.py
+docker-compose up --build
 ```
 
 ### Access Services

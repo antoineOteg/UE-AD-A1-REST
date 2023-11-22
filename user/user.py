@@ -11,7 +11,7 @@ PORT = 3203
 HOST = '0.0.0.0'
 moviePort = 3200
 bookingPort = 3201
-showtime = 3202
+showtimePort = 3202
 
 ###           ###
 
@@ -46,7 +46,7 @@ def create_user():
     # get id of new user
     req = request.get_json()
     if (req["name"] is None):
-        return make_response(jsonify({"error": "attribut name missing"}), 400)
+        return make_response(jsonify({"error": "attribute name missing"}), 400)
     id = req["name"].lower().replace(" ", "_")
 
     # check if id already exists
@@ -72,7 +72,7 @@ def get_user_byid(id):
     for user in users:
         if str(user["id"]) == str(id):
             return make_response(jsonify(user), 200)
-    return make_response(jsonify({"error": "user ID don't exists"}), 400)
+    return make_response(jsonify({"error": "user ID doesn't exists"}), 400)
 
 
 # create or update a user's name and/or last_active
@@ -110,57 +110,57 @@ def delete_user_by_id(id):
 # call movie service to get a movie by its id
 @app.route("/movies/<movieid>", methods=['GET'])
 def get_movie_byid(movieid):
-    return request_service(requests.get, f"http://{HOST}:{moviePort}/movies/{movieid}")
+    return request_service(requests.get, f"http://movie:{moviePort}/movies/{movieid}")
 
 
 # call movie service to get a movie by its title
 @app.route("/moviesbytitle", methods=['GET'])
 def get_movie_bytitle():
-    return request_service(requests.get, f"http://{HOST}:{moviePort}/moviesbytitle")
+    return request_service(requests.get, f"http://movie:{moviePort}/moviesbytitle")
 
 
 # call movie service to get all movies made by a specific director
 @app.route("/moviesbyDirector/<movieDirector>", methods=['GET'])
 def get_movie_byDirector(movieDirector):
-    return request_service(requests.get, f"http://{HOST}:{moviePort}/moviesbyDirector/{movieDirector}")
+    return request_service(requests.get, f"http://movie:{moviePort}/moviesbyDirector/{movieDirector}")
 
 
 # call movie service to create a new movie
 @app.route("/movies", methods=['POST'])
 def create_movie(movieid):
-    return request_service(requests.post, f"http://{HOST}:{moviePort}/movies/{movieid}")
+    return request_service(requests.post, f"http://movie:{moviePort}/movies/{movieid}")
 
 
 # call movie service to update a movie rating
 @app.route("/movies/<movieid>/<rate>", methods=['PUT'])
 def update_movie_rating(movieid, rate):
-    return request_service(requests.put, f"http://{HOST}:{moviePort}/movies/{movieid}/{rate}")
+    return request_service(requests.put, f"http://movie:{moviePort}/movies/{movieid}/{rate}")
 
 
 # call movie service to delete a movie
 @app.route("/movies/<movieid>", methods=['DELETE'])
 def del_movie(movieid):
-    return request_service(requests.delete, f"http://{HOST}:{moviePort}/movies/{movieid}")
+    return request_service(requests.delete, f"http://movie:{moviePort}/movies/{movieid}")
 
 
 # call showtime service to get all showtimes
 @app.route("/showtimes", methods=['GET'])
 def get_schedule():
-    return request_service(requests.get, f"http://{HOST}:{showtime}/showtimes")
+    return request_service(requests.get, f"http://showtime:{showtimePort}/showtimes")
 
 
 # call showtime service to get all showtimes on a specific date
 @app.route("/showmovies/<date>", methods=['GET'])
 def get_movies_bydate(date):
-    return request_service(requests.get, f"http://{HOST}:{showtime}/showmovies‹/{date}")
+    return request_service(requests.get, f"http://booking:{showtimePort}/showmovies‹/{date}")
 
 
 # call booking service to get all bookings of a specific user
 @app.route("/user/bookings/<userid>", methods=['GET'])
 def get_user_bookings(userid):
-    return request_service(requests.get, f'http://{HOST}:{bookingPort}/bookings/{userid}')
+    return request_service(requests.get, f'http://booking:{bookingPort}/bookings/{userid}')
 
 
 if __name__ == "__main__":
     print("Server running in port %s" % (PORT))
-    app.run(host=HOST, port=PORT)
+    app.run(host='0.0.0.0', port=PORT)

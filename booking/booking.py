@@ -47,7 +47,7 @@ def add_booking_byuser(userid: str):
 
     # check if there's a showtime for the requested movie and date by contacting the showtime service
     try:
-        showtime = requests.get(f"http://{HOST}:{showtimePort}/showmovies/{moviedate}")
+        showtime = requests.get(f"http://showtime:{showtimePort}/showmovies/{moviedate}")
     except Exception as e:
         # print(e)
         return make_response(jsonify({"error": f'error when requesting showtime'}), 400)
