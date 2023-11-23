@@ -107,6 +107,30 @@ def delete_user_by_id(id):
     return make_response(jsonify({"error": "there is no user to delete for this id"}), 400)
 
 
+# get information about the booked movies from a user
+@app.route("/users/bookedmovies/<id>", methods=['GET'])
+def get_user_booked_movies(id):
+
+    # get bookings of user from the booking service
+    try:
+        bookings = requests.get(f'http://booking:{bookingPort}/bookings/{id}', json=request.get_json())
+    except Exception as e:
+        return make_response(jsonify({"error": str(e)}), 500)
+
+    movies = []
+
+    # for each movie in every booking, call movie service to get its information
+    for booking in bookings.json()['dates']:
+        for movieId in booking['movies']:
+            try:
+                # use the already defined function to get a movie by its id
+                movieInfo = get_movie_byid(movieId).get_json()
+                movies.append(movieInfo)
+            except Exception as e:
+                return make_response(jsonify({"error": str(e)}), 500)
+    return jsonify(movies), 200
+
+
 # call movie service to get a movie by its id
 @app.route("/movies/<movieid>", methods=['GET'])
 def get_movie_byid(movieid):
