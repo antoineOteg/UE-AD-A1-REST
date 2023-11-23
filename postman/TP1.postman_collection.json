@@ -372,6 +372,30 @@
 								}
 							},
 							"response": []
+						},
+						{
+							"name": "Get User Booked Movies",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://127.0.0.1:3203/users/bookedmovies/chris_rivers",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "3203",
+									"path": [
+										"users",
+										"bookedmovies",
+										"chris_rivers"
+									]
+								}
+							},
+							"response": []
 						}
 					]
 				}
